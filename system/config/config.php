@@ -5,5 +5,5 @@ define('DB_USER',       'root');
 define('DB_PASSWORD',   '');
  
 // Thông số controller và action mặc định
-define('CONTROLLER_DEFAULT', 'index');
-define('ACTION_DEFAULT', 'index');
+//define('CONTROLLER_DEFAULT', 'index');
+//define('ACTION_DEFAULT', 'index');

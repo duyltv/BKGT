@@ -26,6 +26,11 @@ function BK_load()
      
     // Include controller chính để các controller con nó kế thừa
     include_once PATH_SYSTEM . '/core/BK_Controller.php';
+
+    // Load Base_Controller
+    if (file_exists(PATH_APPLICATION . '/core/Base_Controller.php')){
+        include_once PATH_APPLICATION . '/core/Base_Controller.php';
+    }
      
     // Gọi file controller vào
     require_once PATH_APPLICATION . '/controller/' . $controller . '.php';

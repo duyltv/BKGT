@@ -36,5 +36,13 @@ class BK_Controller
         require_once PATH_SYSTEM . '/core/loader/BK_Config_Loader.php';
         $this->config   = new BK_Config_Loader();
         $this->config->load('config');
+
+        // Loader Library
+        require_once PATH_SYSTEM . '/core/loader/BK_Library_Loader.php';
+        $this->library = new BK_Library_Loader();
+
+        // Load View
+        require_once PATH_SYSTEM . '/core/loader/BK_View_Loader.php';
+        $this->view = new BK_View_Loader();
     }
 }

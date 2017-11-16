@@ -44,5 +44,9 @@ class BK_Controller
         // Load View
         require_once PATH_SYSTEM . '/core/loader/BK_View_Loader.php';
         $this->view = new BK_View_Loader();
+
+        // Load Model
+        require_once PATH_SYSTEM . '/core/loader/BK_Model_Loader.php';
+        $this->model = new BK_Model_Loader();
     }
 }

@@ -32,5 +32,9 @@ class BK_Controller
      */
     public function __construct() 
     {
+        // Loader cho config
+        require_once PATH_SYSTEM . '/core/loader/BK_Config_Loader.php';
+        $this->config   = new BK_Config_Loader();
+        $this->config->load('config');
     }
 }

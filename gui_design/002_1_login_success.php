@@ -5,10 +5,12 @@
     <!-- block -->
     <div class="block">
         <div class="navbar navbar-inner block-header">
-            <div class="muted pull-center">ĐĂNG NHẬP HỆ THỐNG</div>
+            <div class="muted"><center>ĐĂNG NHẬP HỆ THỐNG</center></div>
         </div>
         <div class="block-content collapse in">
-            Đăng nhập thành công. Đang chuyển hướng về lại...
+            <center>
+                Đăng nhập thành công. Đang chuyển hướng về lại...
+            </center>
         </div>
     </div>
     <!-- /block -->

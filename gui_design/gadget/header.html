@@ -30,17 +30,20 @@
                                 <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user"></i> Đăng nhập <i class="caret"></i>
 
                                 </a>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu" style="width:350px">
                                     <li>
                                         <!--<a tabindex="-1" href="#">Profile</a>-->
                                         <form action="login.php" id="login_id" method="POST">
-                                            <td>
-                                                <tr>Tên đăng nhập: </tr>
-                                                <tr><input type="text" placeholder="Enter Username" name="uname" required></tr>
-                                            <td>
-                                                <tr>Mật khẩu: </tr>
-                                                <tr><input type="password" placeholder="Enter Password" name="pword" required></tr>
-                                            </td>
+                                            <table>
+                                                <tr>
+                                                    <td>Tên đăng nhập: </td>
+                                                    <td><input type="text" placeholder="Enter Username" name="uname" required></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mật khẩu: </td>
+                                                    <td><input type="password" placeholder="Enter Password" name="pword" required></td>
+                                                </tr>
+                                            </table>
                                             <button type="submit" hidden>Submit</button>
                                         </form>
                                     </li>

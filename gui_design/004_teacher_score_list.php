@@ -7,6 +7,7 @@
         <div class="navbar navbar-inner block-header">
             <div class="muted pull-right"></div>
             <div class="pull-right">
+              <a href=""><span class="badge badge-warning">Chỉnh sửa điểm thành phần</span></a>
               <a href=""><span class="badge badge-warning">Tải mẫu nhập điểm</span></a>
               <a href=""><span class="badge badge-warning">Chọn tệp bảng điểm</span></a>
               <a href=""><span class="badge badge-warning">Nhập điểm</span></a>

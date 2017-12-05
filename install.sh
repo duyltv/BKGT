@@ -1,6 +1,6 @@
 #!/bin/bash
 # GLOBAL VARIABLES
-INS_PATH=/var/www/html
+INS_PATH=/mnt/c/xampp/htdocs/
 
 function clean_dir {
 	rm -rf $INS_PATH/BKGT > /dev/null

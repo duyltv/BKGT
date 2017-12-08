@@ -2,7 +2,7 @@
  
 class BK_Model_Loader
 {
-     
+    protected $conn = NULL;
     /**
      * Load model
      *
@@ -17,12 +17,12 @@ class BK_Model_Loader
         ob_end_clean();
 		
 		// Open SQL session
-		$link = @mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
-		if (!$link) {
-			die('Could not connect: ' . mysql_error());
+		$this->conn = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+		if (!$this->conn) {
+			die('Could not connect: ' . mysqli_connect_error());
 		}
-		mysql_set_charset('utf8',$link);
-		@mysql_select_db(DB_NAME) or die( "Unable to select database");
+		//mysqli_set_charset('utf8',$link);
+		//@mysqli_select_db(DB_NAME) or die( "Unable to select database");
     }
 	
 	/**
@@ -34,10 +34,10 @@ class BK_Model_Loader
     public function search($model, $input, $field = 'content')
     {
         $query = "SELECT * FROM $model WHERE $field LIKE '%".$input."%'";
-		$result_q = mysql_query($query);
+		$result_q = mysqli_query($this->conn,$query);
 		
 		$result = array();
-		while ($row = mysql_fetch_array($result_q, MYSQL_ASSOC)) {
+		while ($row = mysqli_fetch_array($result_q, MYSQLI_ASSOC)) {
 			$result[] = $row;
 		}
 		
@@ -61,7 +61,7 @@ class BK_Model_Loader
 		
 		$query = "INSERT INTO $model ($mat_keys) VALUES ('$mat_values')";
 		
-		mysql_query($query);
+		mysqli_query($this->conn,$query);
     }
 	
 	/**
@@ -75,10 +75,10 @@ class BK_Model_Loader
 		$query = "SELECT * FROM $model ";
 		if( !is_null($id) ) $query .= "WHERE id = '$id'";
 
-		$result_q = mysql_query($query);
+		$result_q = mysqli_query($this->conn,$query);
 
 		$result = array();
-		while ($row = mysql_fetch_array($result_q, MYSQL_ASSOC)) {
+		while ($row = mysqli_fetch_array($result_q, MYSQLI_ASSOC)) {
 			$result[] = $row;
 		}
 
@@ -95,11 +95,11 @@ class BK_Model_Loader
 			$query = "SELECT COUNT(*) as soluong FROM $model";
 		else
 			$query = "SELECT COUNT(*) as soluong FROM $model WHERE $cond";
-		$result_q = mysql_query($query);
+		$result_q = mysqli_query($this->conn,$query);
 		//echo $query;
 		$result = array();
 
-		while ($row = mysql_fetch_array($result_q, MYSQL_ASSOC)) {
+		while ($row = mysqli_fetch_array($result_q, MYSQLI_ASSOC)) {
 			$result[] = $row;
 		}
 
@@ -113,10 +113,10 @@ class BK_Model_Loader
 	public function get_condition($model, $cond)
 	{
 		$query = "SELECT * FROM $model WHERE $cond";
-		$result_q = mysql_query($query);
+		$result_q = mysqli_query($this->conn,$query);
 
 		$result = array();
-		while ($row = mysql_fetch_array($result_q, MYSQL_ASSOC)) {
+		while ($row = mysqli_fetch_array($result_q, MYSQLI_ASSOC)) {
 			$result[] = $row;
 		}
 
@@ -145,7 +145,7 @@ class BK_Model_Loader
 		$query = $query . "$keys[$max_1] = '$values[$max_1]' ";
 		$query = $query . "WHERE id = '$values[0]'";
 
-		mysql_query($query);
+		mysqli_query($this->conn,$query);
     }
 	
 	/**
@@ -169,6 +169,6 @@ class BK_Model_Loader
 		$max_1 = $max-1;
 		$query = $query . "$keys[$max_1] = '$values[$max_1]' ";
 
-		mysql_query($query);
+		mysqli_query($this->conn,$query);
     }
 }

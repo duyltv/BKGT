@@ -100,7 +100,7 @@ class BK_Model_Loader
 		$result = array();
 
 		while ($row = mysqli_fetch_array($result_q, MYSQLI_ASSOC)) {
-			$result[] = $row;
+			$result = $row;
 		}
 
 		return $result;

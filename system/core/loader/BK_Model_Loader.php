@@ -236,4 +236,34 @@ class BK_Model_Loader
 
 		return $result;
    	}
+
+	public function get_subjects_by_user_id($id = "")
+   	{
+   		if ($id == "")
+   		{
+   			return [];
+   		}
+
+   		if ($this->conn == NULL)
+   		{
+   			$this->load('users');
+   		}
+
+	   	$query = "select subject.id as subject_id, subject.name as subject_name, teach.semester_id from (
+	   		select id, name
+	   		from subjects) as subject
+	   	join (
+	   		select * 
+	   		from teach) as teach
+	   	on subject.id = teach.subject_id and teach.user_id = " . $id . "
+	   	order by teach.semester_id";
+		$result_q = mysqli_query($this->conn,$query);
+
+		$result = array();
+		while ($row = mysqli_fetch_array($result_q, MYSQLI_ASSOC)) {
+			$result[] = $row;
+		}
+
+		return $result;
+   	}
 }

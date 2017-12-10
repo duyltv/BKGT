@@ -171,4 +171,69 @@ class BK_Model_Loader
 
 		mysqli_query($this->conn,$query);
     }
+
+
+    /*
+     * ADVANCED FUNCTIONS
+     *	
+     * These funcs are used to do the advanced jobs that don't need
+     * much resources
+     *
+     */
+
+   	public function get_score_by_studentid($id = "")
+   	{
+   		if ($id == "")
+   		{
+   			return [];
+   		}
+
+   		if ($this->conn == NULL)
+   		{
+   			$this->load('users');
+   		}
+
+	   	$query = "select scoretable.*,  elementtable.score_element_name
+	   	from (
+	   		select score.id as score_id, score.user_id, score.semester_id, info.subject_id, info.name as subject_name, score.score_element_id, score.score  
+   			from (
+   				SELECT * 
+   				FROM scores
+   			) 
+   			as score 
+   			JOIN (
+   				SELECT study.user_id, study.semester_id, subject.subject_id, subject.name, subject.fomular 
+   				FROM (
+   					SELECT * 
+   					FROM study 
+   					where user_id=" . $id . "
+   				) 
+   				AS study 
+   				JOIN (
+   					SELECT id as subject_id, name, fomular 
+   					FROM subjects
+   				) 
+   				as subject
+   				ON subject.subject_id = study.subject_id
+   			) 
+   			as info
+   		) 
+   		as scoretable
+   		JOIN (
+   			select id as score_element_id, name as score_element_name 
+   			from score_elements
+   		)
+   		as elementtable
+   		ON scoretable.score_element_id = elementtable.score_element_id
+   		group by elementtable.score_element_id
+   		order by subject_id";
+		$result_q = mysqli_query($this->conn,$query);
+
+		$result = array();
+		while ($row = mysqli_fetch_array($result_q, MYSQLI_ASSOC)) {
+			$result[] = $row;
+		}
+
+		return $result;
+   	}
 }

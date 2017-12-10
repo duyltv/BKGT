@@ -4,13 +4,13 @@ class User_Controller extends BK_Controller
 {
     public function loginAction()
     {
-        if(isset($_GET['username']))
+        if(isset($_POST['username']))
         {
             $this->model->load('users');
             $users = $this->model->get('users');
             foreach($users as $user)
             {
-                if($user['username'] == $_GET['username'] && $user['password'] == $_GET['password']) 
+                if($user['username'] == $_POST['username'] && $user['password'] == $_POST['password']) 
                 {
                     $_SESSION['id'] = $user['id'];
                     $_SESSION['username'] = $user['username'];
@@ -39,11 +39,11 @@ class User_Controller extends BK_Controller
 
     public function addAction()
     {
-        if(isset($_GET['username']))
+        if(isset($_POST['username']))
         {
             $this->model->load('users');
 
-            $dup_count = $this->model->get_count('users', 'id=\''.$_GET['id'].'\'')['soluong'];
+            $dup_count = $this->model->get_count('users', 'id=\''.$_POST['id'].'\'')['soluong'];
             if ($dup_count > 0)
             {
                 echo "User exist:";
@@ -52,12 +52,12 @@ class User_Controller extends BK_Controller
             }
 
             $data = array(
-                'id' => $_GET['id'],
-                'username' => $_GET['username'],
-                'password' => $_GET['password'],
-                'email' => $_GET['email'],
-                'fullname' => $_GET['fullname'],
-                'role' => $_GET['role'],
+                'id' => $_POST['id'],
+                'username' => $_POST['username'],
+                'password' => $_POST['password'],
+                'email' => $_POST['email'],
+                'fullname' => $_POST['fullname'],
+                'role' => $_POST['role'],
             );
 
             $this->model->insert('users',$data);
@@ -67,12 +67,12 @@ class User_Controller extends BK_Controller
 
     public function deleteAction()
     {
-        if(isset($_GET['id']))
+        if(isset($_POST['id']))
         {
             $this->model->load('users');
 
             $data = array(
-                'id' => $_GET['id']
+                'id' => $_POST['id']
             );
 
             $this->model->delete('users',$data);
@@ -82,17 +82,17 @@ class User_Controller extends BK_Controller
 
     public function updateAction()
     {
-        if(isset($_GET['id']))
+        if(isset($_POST['id']))
         {
             $this->model->load('users');
 
             $data = array(
-                'id' => $_GET['id'],
-                'username' => $_GET['username'],
-                'password' => $_GET['password'],
-                'email' => $_GET['email'],
-                'fullname' => $_GET['fullname'],
-                'role' => $_GET['role'],
+                'id' => $_POST['id'],
+                'username' => $_POST['username'],
+                'password' => $_POST['password'],
+                'email' => $_POST['email'],
+                'fullname' => $_POST['fullname'],
+                'role' => $_POST['role'],
             );
 
             $this->model->update('users',$data);

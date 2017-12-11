@@ -266,4 +266,56 @@ class BK_Model_Loader
 
 		return $result;
    	}
+
+   	public function get_score_list_by_subject($subject_id = "")
+   	{
+   		if ($subject_id == "")
+   		{
+   			return [];
+   		}
+
+   		if ($this->conn == NULL)
+   		{
+   			$this->load('users');
+   		}
+
+	   	$query = "select score.semester_id, score.user_id, course_info.fullname, course_info.element_id, course_info.element_name, course_info.element_type as element_type, score 
+	   	from (
+	   		select user_id, semester_id, score_element_id, score 
+	   		from scores
+	   	) as score 
+	   	join (
+	   		select user_subject.semester_id, user_subject.user_id, user_subject.fullname, element.id as element_id, element.name as element_name, element.type as element_type 
+	   		from (
+	   			select id, subject_id, name, type 
+	   			from score_elements
+	   		) as element 
+	   		join (
+	   			select study.subject_id, study.semester_id, user.user_id, user.fullname 
+	   			from (
+	   				select id as user_id, fullname 
+	   				from users
+	   			) as user 
+	   			join (
+	   				select * 
+	   				from study 
+	   				where subject_id = " . $subject_id . " 
+	   				order by semester_id
+	   			) as study 
+	   			on user.user_id = study.user_id
+	   		) as user_subject 
+	   		on element.subject_id = user_subject.subject_id
+	   	) as course_info 
+	   	on score.user_id = course_info.user_id 
+	   	and score.semester_id = course_info.semester_id 
+	   	and score.score_element_id = course_info.element_id";
+		$result_q = mysqli_query($this->conn,$query);
+
+		$result = array();
+		while ($row = mysqli_fetch_array($result_q, MYSQLI_ASSOC)) {
+			$result[] = $row;
+		}
+
+		return $result;
+   	}
 }

@@ -318,4 +318,27 @@ class BK_Model_Loader
 
 		return $result;
    	}
+
+   	public function get_element_list_by_subject($subject_id = "")
+   	{
+   		if ($subject_id == "")
+   		{
+   			return [];
+   		}
+
+   		if ($this->conn == NULL)
+   		{
+   			$this->load('subjects');
+   		}
+
+	   	$query = "select name from score_elements where subject_id = " . $subject_id;
+		$result_q = mysqli_query($this->conn,$query);
+
+		$result = array();
+		while ($row = mysqli_fetch_array($result_q, MYSQLI_ASSOC)) {
+			$result[] = $row;
+		}
+
+		return $result;
+   	}
 }

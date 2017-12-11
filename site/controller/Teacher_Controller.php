@@ -66,4 +66,23 @@ class Teacher_Controller extends BK_Controller
             print_r($scores);
         }
     }
+
+    public function typeAction()
+    {
+        if(isset($_GET['subject_id']))
+        {
+            $this->model->load('subjects');
+
+            $elements_table = $this->model->get_element_list_by_subject($_GET['subject_id']);
+
+            $elements = array();
+
+            foreach($elements_table as $element_tb) 
+            {
+                $elements[] = $element_tb['name'];
+            }
+
+            print_r($elements);
+        }
+    }
 }

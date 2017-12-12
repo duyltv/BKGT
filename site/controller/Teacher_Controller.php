@@ -69,9 +69,10 @@ class Teacher_Controller extends BK_Controller
 
             $data = array(
                 'title' => 'Quản lý môn học',
+                'subject_name' => $_GET['subject_id'],
                 'scores' => $scores
             );
-            $this->view->load('xxx_xxx', $data);
+            $this->view->load('004_3_teacher_score_list', $data);
             $this->view->show();
         }
     }
@@ -118,8 +119,6 @@ class Teacher_Controller extends BK_Controller
             {
                 $outcomes[$i] = $_POST['outcome' . $i];
             }
-            print_r($outcomes);
-
             // Insert subject
             $subject_data = array(
                 'id' => $subject_id,
@@ -148,6 +147,9 @@ class Teacher_Controller extends BK_Controller
             );
             $this->model->insert('teach', $teach_data);
 
+            $data = array(
+                'title' => 'Quản lý môn học'
+            );
             $this->view->load('004_5_teacher_score_element', $data);
             $this->view->show();
         }

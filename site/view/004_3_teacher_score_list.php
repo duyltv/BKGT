@@ -10,7 +10,7 @@
               <a href=""><span class="badge badge-warning">Chỉnh sửa điểm thành phần</span></a>
               <a href=""><span class="badge badge-warning">Tải mẫu nhập điểm</span></a>
               <a href=""><span class="badge badge-warning">Chọn tệp bảng điểm</span></a>
-              <a href=""><span class="badge badge-warning">Nhập điểm</span></a>
+              <a href="index.php?c=teacher&a=type&subject_id=<?php echo $data['subject_id']; ?>"><span class="badge badge-warning">Nhập điểm</span></a>
             </div>
         </div>
         <div class="block-content collapse in">
@@ -27,17 +27,25 @@
 
                         if(isset($data))
                         {
-                          $score_title = $data['scores'][0];
-                          $titles = array_keys($score_title);
-
-                          $count=1;
-                          foreach($titles as $title) 
+                          if(isset($data['scores']))
                           {
-                            if($count > 3)
+                            $score_title = $data['scores'][0];
+                            $titles = array_keys($score_title);
+
+                            $count=1;
+                            foreach($titles as $title) 
+                            {
+                              if($count > 3)
+                              {
+                                echo '<th>'.$title.'</th>';
+                              }
+                              $count=$count+1;
+                            }
+                          } else {
+                            foreach($data['elements'] as $title) 
                             {
                               echo '<th>'.$title.'</th>';
                             }
-                            $count=$count+1;
                           }
                         }
                       ?>
@@ -47,7 +55,7 @@
                   <tbody>
                     <?php 
 
-                      if(isset($data))
+                      if(isset($data['scores']))
                       {
                         $scores = $data['scores'];
                         $count=1;

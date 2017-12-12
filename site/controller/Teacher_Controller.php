@@ -67,11 +67,25 @@ class Teacher_Controller extends BK_Controller
 
             $scores = $this->convert_scoretable_to_printable($score_table);
 
+            $subject = $this->model->get('subjects', $_GET['subject_id'])[0];
+            $subject_name = $subject['name'];
+
             $data = array(
                 'title' => 'Quản lý môn học',
-                'subject_name' => $_GET['subject_id'],
+                'subject_id' => $_GET['subject_id'],
+                'subject_name' => $subject_name,
                 'scores' => $scores
             );
+
+            if(sizeof($data['scores'])==0)
+            {
+                $data = array(
+                    'title' => 'Quản lý môn học',
+                    'subject_id' => $_GET['subject_id'],
+                    'subject_name' => $subject_name,
+                    'elements' => $this->model->get_element_list_by_subject($_GET['subject_id'])
+                );
+            }
             $this->view->load('004_3_teacher_score_list', $data);
             $this->view->show();
         }
@@ -81,18 +95,19 @@ class Teacher_Controller extends BK_Controller
     {
         if(isset($_GET['subject_id']))
         {
-            $this->model->load('subjects');
+            $this->model->load('users');
 
-            $elements_table = $this->model->get_element_list_by_subject($_GET['subject_id']);
+            $score_table = $this->model->get_score_list_by_subject($_GET['subject_id']);
 
-            $elements = array();
+            $scores = $this->convert_scoretable_to_printable($score_table);
 
-            foreach($elements_table as $element_tb) 
-            {
-                $elements[] = $element_tb['name'];
-            }
-
-            print_r($elements);
+            $data = array(
+                'title' => 'Quản lý môn học',
+                'subject_name' => $_GET['subject_id'],
+                'elements' => $this->model->get_element_list_by_subject($_GET['subject_id'])
+            );
+            $this->view->load('004_4_teacher_type_score', $data);
+            $this->view->show();
         }
     }
 

@@ -331,7 +331,7 @@ class BK_Model_Loader
    			$this->load('subjects');
    		}
 
-	   	$query = "select name from score_elements where subject_id = " . $subject_id;
+	   	$query = "select id, name from score_elements where subject_id = " . $subject_id;
 		$result_q = mysqli_query($this->conn,$query);
 
 		$result = array();

@@ -94,4 +94,62 @@ class Teacher_Controller extends BK_Controller
             print_r($elements);
         }
     }
+
+    public function newsubjectAction()
+    {
+        if(!isset($_POST['sname']))
+        {
+            $data = array(
+                    'title' => 'Quản lý môn học',
+            );
+            $this->view->load('004_2_teacher_new_subject', $data);
+            $this->view->show();
+        }
+        else
+        {
+            // POST new subject
+            $outcome_count = $_POST['out_count'];
+            $subject_id = $_POST['sid'];
+            $subject_name = $_POST['sname'];
+            $subject_descript = $_POST['sdes'];
+
+            $outcomes = array();
+            for ($i = 1; $i <= $outcome_count; $i++) 
+            {
+                $outcomes[$i] = $_POST['outcome' . $i];
+            }
+            print_r($outcomes);
+
+            // Insert subject
+            $subject_data = array(
+                'id' => $subject_id,
+                'name' => $subject_name,
+                'description' => $subject_descript
+            );
+            $this->model->insert('subjects', $subject_data);
+
+            // Insert outcomes
+            for ($i = 1; $i <= $outcome_count; $i++) 
+            {
+                $outcome = $outcomes[$i];
+                $outcome_data = array(
+                    'subject_id' => $subject_id,
+                    'description' => $outcome
+                );
+
+                $this->model->insert('outcomes', $outcome_data);
+            }
+
+            // Insert current user to the teacher of this subject
+            $teach_data = array(
+                'user_id' => $_SESSION['username'],
+                'subject_id' => $subject_id,
+                'semester_id' => $_POST['ssem']
+            );
+            $this->model->insert('teach', $teach_data);
+
+            $this->view->load('004_5_teacher_score_element', $data);
+            $this->view->show();
+        }
+    }
 }

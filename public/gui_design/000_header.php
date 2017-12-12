@@ -26,7 +26,7 @@
                      <span class="icon-bar"></span>
                      <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="#">Bach Khoa Grade Tracer</a>
+                    <a class="brand" href="index.php">Bach Khoa Grade Tracer</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav pull-right">
                             <?php if (!isset($_SESSION['username'])) { ?>

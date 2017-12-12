@@ -12,14 +12,13 @@
         <div class="block-content collapse in">
             Môn học: Trí tuệ nhân tạo
             <div class="span12">
-              <form action="" method="POST">
+              <form action="index.php?c=teacher&a=type" method="POST">
                 <table class="table table-hover">
                   <thead>
                     <tr>
                       <th>#</th>
                       <th>Học kỳ</th>
                       <th>MSSV</th>
-                      <th>Họ và tên SV</th>
                       <?php 
 
                         if(isset($data))
@@ -37,7 +36,6 @@
                       <td>1</td>
                       <td><input type="text" placeholder="Học kỳ" name="semester1" value="" style="width: 100%;"></td>
                       <td><input type="text" placeholder="MSSV" name="mssv1" value="" style="width: 100%;"></td>
-                      <td><input type="text" placeholder="Họ và tên" name="svname1" value="" style="width: 100%;"></td>
                       <?php 
 
                         if(isset($data))
@@ -52,6 +50,7 @@
                   </tbody>
                 </table>
                 <input hidden name="score_count" id="score_count" value=1>
+                <input hidden name="subject_id" id="subject_id" value=<?php echo $data['subject_id']; ?>>
                 <a onclick="addScore()">Thêm hàng nhập điểm</a><br>
                 <center><button type="submit">NHẬP ĐIỂM</button></center>
               </form>
@@ -82,17 +81,20 @@ function addScore() {
   score_name.name = "svname" + score_count;
   score_name.value = "";
 
-  var score_1 = new_score.getElementsByTagName("input")[3];
-  score_1.name = "score" + score_count + "_1";
-  score_1.value = "";
+  <?php 
 
-  var score_2 = new_score.getElementsByTagName("input")[4];
-  score_2.name = "score" + score_count + "_2";
-  score_2.value = "";
-
-  var score_3 = new_score.getElementsByTagName("input")[5];
-  score_3.name = "score" + score_count + "_3";
-  score_3.value = "";
+  if(isset($data))
+  {
+    $count = 1;
+    foreach($data['elements'] as $title) 
+    {
+      echo 'var score_'.$title['id'].' = new_score.getElementsByTagName("input")['.($count+2).'];';
+      echo 'score_'.$title['id'].'.name = "score" + score_count + "_'.$count.'";';
+      echo 'score_'.$title['id'].'.value = "";';
+      $count=$count+1;
+    }
+  }
+?>
 
   var score_order = new_score.getElementsByTagName("td")[0];
   score_order.innerHTML=score_count;

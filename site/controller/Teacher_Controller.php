@@ -93,20 +93,75 @@ class Teacher_Controller extends BK_Controller
 
     public function typeAction()
     {
-        if(isset($_GET['subject_id']))
+        if(!isset($_POST['semester1']))
         {
-            $this->model->load('users');
+            if(isset($_GET['subject_id']))
+            {
+                $this->model->load('users');
 
-            $score_table = $this->model->get_score_list_by_subject($_GET['subject_id']);
+                $score_table = $this->model->get_score_list_by_subject($_GET['subject_id']);
+
+                $scores = $this->convert_scoretable_to_printable($score_table);
+
+                $subject = $this->model->get('subjects', $_GET['subject_id'])[0];
+                $subject_name = $subject['name'];
+
+                $data = array(
+                    'title' => 'Quản lý môn học',
+                    'subject_id' => $_GET['subject_id'],
+                    'subject_name' => $subject_name,
+                    'elements' => $this->model->get_element_list_by_subject($_GET['subject_id'])
+                );
+                $this->view->load('004_4_teacher_type_score', $data);
+                $this->view->show();
+            }
+        } else {
+            $this->model->load('subjects');
+            $score_count = $_POST['score_count'];
+            $subject_id = $_POST['subject_id'];
+
+            $subject = $this->model->get('subjects', $subject_id)[0];
+            $subject_name = $subject['name'];
+
+            for ($i = 1; $i <= $score_count; $i++) 
+            {
+                $semester_id = $_POST['semester'.$i];
+                $student_id = $_POST['mssv'.$i];
+
+                $data = array(
+                    'subject_id' => $subject_id,
+                    'semester_id' => $semester_id,
+                    'user_id' => $student_id
+                );
+                $this->model->insert('study', $data);
+                
+                $elements = $this->model->get_element_list_by_subject($subject_id);
+                $ele_count = 1;
+                foreach($elements as $element)
+                {
+                    $data = array(
+                        'semester_id' => $semester_id,
+                        'user_id' => $student_id,
+                        'score_element_id' => $element['id'],
+                        'score' => $_POST['score'.$i.'_'.$ele_count]
+                    );
+                    $this->model->insert('scores', $data);
+                    $ele_count = $ele_count + 1;
+                }
+            }
+
+            $score_table = $this->model->get_score_list_by_subject($subject_id);
 
             $scores = $this->convert_scoretable_to_printable($score_table);
 
             $data = array(
                 'title' => 'Quản lý môn học',
-                'subject_name' => $_GET['subject_id'],
-                'elements' => $this->model->get_element_list_by_subject($_GET['subject_id'])
+                'subject_id' => $subject_id,
+                'subject_name' => $subject_name,
+                'scores' => $scores
             );
-            $this->view->load('004_4_teacher_type_score', $data);
+
+            $this->view->load('004_3_teacher_score_list', $data);
             $this->view->show();
         }
     }

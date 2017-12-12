@@ -47,7 +47,6 @@ class Student_Controller extends BK_Controller
     public function indexAction()
     {
         // Please check login before go to this page
-        session_start();
         if(isset($_SESSION['username']))
         {
             $this->model->load('users');
@@ -56,7 +55,12 @@ class Student_Controller extends BK_Controller
             $score_table = $this->model->get_score_by_studentid($_SESSION['username']);
             $print_score_table = $this->convert_scoretable_to_printable($score_table);
 
-            print_r($print_score_table);
+            $data = array(
+                'title' => 'Bảng điểm cá nhân',
+                'score_table' => $print_score_table
+            );
+            $this->view->load('003_student_view', $data);
+            $this->view->show();
         }
     }
 }

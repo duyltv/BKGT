@@ -63,6 +63,11 @@
                         </ul>
                         <ul class="nav">
                             <?php if (isset($_SESSION['role'])) {
+                                if ($_SESSION['role']=='1') { ?>
+                                    <li <?php if ($data['title'] == 'Bảng điểm cá nhân') echo 'class="active"' ?>>
+                                        <a href="index.php?c=student">Bảng điểm cá nhân</a>
+                                    </li>
+                                <?php }
                                 if ($_SESSION['role']=='2') { ?>
                                     <li <?php if ($data['title'] == 'Quản lý môn học') echo 'class="active"' ?>>
                                         <a href="#">Quản lý môn học</a>

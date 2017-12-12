@@ -42,14 +42,18 @@ class Teacher_Controller extends BK_Controller
     public function subjectsAction()
     {
         // Please check login before go to this page
-        session_start();
         if(isset($_SESSION['username']))
         {
             $this->model->load('users');
 
             $subjects = $this->model->get_subjects_by_user_id($_SESSION['username']);
 
-            print_r($subjects);
+            $data = array(
+                'title' => 'Quản lý môn học',
+                'subjects' => $subjects
+            );
+            $this->view->load('004_1_teacher_subject_list', $data);
+            $this->view->show();
         }
     }
 
@@ -63,7 +67,12 @@ class Teacher_Controller extends BK_Controller
 
             $scores = $this->convert_scoretable_to_printable($score_table);
 
-            print_r($scores);
+            $data = array(
+                'title' => 'Quản lý môn học',
+                'scores' => $scores
+            );
+            $this->view->load('xxx_xxx', $data);
+            $this->view->show();
         }
     }
 

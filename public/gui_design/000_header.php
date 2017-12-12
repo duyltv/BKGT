@@ -70,7 +70,7 @@
                                 <?php }
                                 if ($_SESSION['role']=='2') { ?>
                                     <li <?php if ($data['title'] == 'Quản lý môn học') echo 'class="active"' ?>>
-                                        <a href="#">Quản lý môn học</a>
+                                        <a href="index.php?c=teacher&a=subjects">Quản lý môn học</a>
                                     </li>
                                 <?php } ?>
                             <?php } ?>

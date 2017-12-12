@@ -2,7 +2,6 @@
 <html class="no-js">
     <?php
     // Start the session
-    session_start();
 
     ?>
     <head>
@@ -38,15 +37,15 @@
                                 <ul class="dropdown-menu" style="width:350px">
                                     <li>
                                         <!--<a tabindex="-1" href="#">Profile</a>-->
-                                        <form action="login.php" id="login_id" method="POST">
+                                        <form action="index.php?c=user&a=login" id="login_id" method="POST">
                                             <table>
                                                 <tr>
                                                     <td>Tên đăng nhập: </td>
-                                                    <td><input type="text" placeholder="Enter Username" name="uname" required></td>
+                                                    <td><input type="text" placeholder="Enter Username" name="username" required></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Mật khẩu: </td>
-                                                    <td><input type="password" placeholder="Enter Password" name="pword" required></td>
+                                                    <td><input type="password" placeholder="Enter Password" name="password" required></td>
                                                 </tr>
                                             </table>
                                             <button type="submit" hidden>Submit</button>
@@ -56,15 +55,10 @@
                                     <li>
                                         <a tabindex="-1" onclick="document.getElementById('login_id').submit()">Đăng nhập</a>
                                     </li>
-                                    
-                                    <li class="divider"></li>
-                                    <li>
-                                        <a tabindex="-1" href="login.html">Logout</a>
-                                    </li>
                                 </ul>
                             </li>
                             <?php } else { ?>
-                            Xin chào <?php echo $_SESSION['username'];?>. <a href="">Thoát</a>
+                            Xin chào <?php echo $_SESSION['username'];?>. <a href="index.php?c=user&a=logout">Thoát</a>
                             <?php } ?>
                         </ul>
                         <ul class="nav">

@@ -4,6 +4,8 @@
  */
 function BK_load()
 {
+    session_start();
+    
     // Lấy phần config khởi tạo ban đầu
     $config = include_once PATH_APPLICATION . '/config/init.php';
  

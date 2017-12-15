@@ -217,11 +217,113 @@ class Teacher_Controller extends BK_Controller
             );
             $this->model->insert('teach', $teach_data);
 
-            $data = array(
-                'title' => 'Quản lý môn học'
+            echo '<script type="text/javascript"> window.location = "index.php?c=teacher&a=element&subject_id='.$subject_id.'" </script>';
+        }
+    }
+
+    public function elementAction()
+    {
+        if(!isset($_POST['element_count']))
+        {
+            // Please check login before go to this page
+            if(isset($_GET['subject_id']))
+            {
+                $this->model->load('outcomes');
+
+                $outcomes = $this->model->get_condition('outcomes', 'subject_id = '.$_GET['subject_id']);
+
+                $subject = $this->model->get('subjects', $_GET['subject_id'])[0];
+                $subject_name = $subject['name'];
+
+                // Get score elements of this subject
+                $element_get = $this->model->get_condition('score_elements', 'subject_id = '.$_GET['subject_id']);
+
+                // An array contains outcomes of elements
+                $element_outs = array();
+                foreach ($element_get as $element)
+                {
+                    $outcome_count = 1;
+                    // An array contains 
+                    $element_out = array();
+
+                    $outcome_of_ele = $this->model->get_condition('outcomes_of_score_element', 'score_element_id = '.$element['id']);
+
+                    foreach ($outcomes as $outcome)
+                    {
+                        $found=false;
+                        foreach ($outcome_of_ele as $out_ele)
+                        {
+                            if ($outcome['id'] == $out_ele['outcome_id'])
+                                $found=true;
+                        }
+                        if ($found)
+                            $element_out[] = $outcome_count;
+                        $outcome_count=$outcome_count+1;
+                    }
+                    $element_outs[] = $element_out;
+                }
+
+                $data = array(
+                    'title' => 'Quản lý môn học',
+                    'subject_id' => $_GET['subject_id'],
+                    'subject_name' => $subject_name,
+                    'subject_fomular' => $subject['fomular'],
+                    'outcomes' => $outcomes,
+                    'elements' => $element_get,
+                    'outcome_of_ele' => $element_outs
+                );
+                $this->view->load('004_5_teacher_score_element', $data);
+                $this->view->show();
+            }
+        } else {
+            $this->model->load('score_elements');
+            $element_count = $_POST['element_count'];
+            for ($i = 1; $i <= $element_count; $i++) 
+            {
+                $outs = $_POST['outcome'.$i];
+                $element_name = $_POST['name'.$i];
+
+                $element_data = array (
+                    'subject_id' => $_GET['subject_id'],
+                    'name' => $element_name
+                );
+
+                $this->model->insert('score_elements', $element_data);
+
+                $element_get = $this->model->get_condition('score_elements', 'subject_id = '.$_GET['subject_id'].' AND name = \''.$element_name.'\'')[0];
+
+                $element_get_id = $element_get['id'];
+
+                $outcomes = $this->model->get_condition('outcomes', 'subject_id = '.$_GET['subject_id']);
+
+                foreach ($outs as $out)
+                {
+                    $select_outcome = array();
+                    $j=1;
+                    foreach ($outcomes as $outcome)
+                    {
+                        if ($j == $out)
+                        {
+                            $select_outcome = $outcome;
+                        }
+                        $j=$j+1;
+                    }
+                    $out_data = array (
+                        'score_element_id' => $element_get_id,
+                        'outcome_id' => $select_outcome['id']
+                    );
+                    $this->model->insert('outcomes_of_score_element', $out_data);
+                }
+            }
+
+            $fomular_data = array (
+                'id' => $_GET['subject_id'],
+                'fomular' => $_POST['fomular']
             );
-            $this->view->load('004_5_teacher_score_element', $data);
-            $this->view->show();
+
+            $this->model->update('subjects', $fomular_data);
+
+            echo '<script type="text/javascript"> window.location = "index.php?c=teacher&a=element&subject_id='.$_GET['subject_id'].'" </script>';
         }
     }
 }

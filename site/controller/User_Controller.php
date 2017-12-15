@@ -50,13 +50,28 @@ class User_Controller extends BK_Controller
         return;
     }
 
+    // Manager roles
+    public function showAction()
+    {
+        $this->model->load('users');
+
+        $users = $this->model->get('users');
+
+        $data = array(
+            'title' => 'Quản lý thành viên',
+            'users' => $users   
+        );
+
+        $this->view->load('005_3_manager_user_list', $data);
+        $this->view->show();
+    }
     public function addAction()
     {
-        if(isset($_POST['username']))
+        if(isset($_POST['user_id']))
         {
             $this->model->load('users');
 
-            $dup_count = $this->model->get_count('users', 'id=\''.$_POST['id'].'\'')['soluong'];
+            $dup_count = $this->model->get_count('users', 'id=\''.$_POST['user_id'].'\'')['soluong'];
             if ($dup_count > 0)
             {
                 echo "User exist:";
@@ -65,8 +80,8 @@ class User_Controller extends BK_Controller
             }
 
             $data = array(
-                'id' => $_POST['id'],
-                'username' => $_POST['username'],
+                'id' => $_POST['user_id'],
+                'username' => $_POST['user_id'],
                 'password' => $_POST['password'],
                 'email' => $_POST['email'],
                 'fullname' => $_POST['fullname'],
@@ -74,34 +89,56 @@ class User_Controller extends BK_Controller
             );
 
             $this->model->insert('users',$data);
-            echo "Added";
+            echo '<script type="text/javascript"> window.location = "index.php?c=user&a=show"</script>';
+        } else {
+            $data = array(
+                'title' => 'Quản lý thành viên'
+            );
+            $this->view->load('005_4_manager_user_add', $data);
+            $this->view->show();
         }
     }
 
     public function deleteAction()
     {
-        if(isset($_POST['id']))
+        if(isset($_GET['user_id']))
         {
             $this->model->load('users');
 
             $data = array(
-                'id' => $_POST['id']
+                'id' => $_GET['user_id']
             );
 
             $this->model->delete('users',$data);
-            echo "Deleted";
+
+            $data = array(
+                'user_id' => $_GET['user_id']
+            );
+            $this->model->delete('teach', $data);
+
+            $data = array(
+                'user_id' => $_GET['user_id']
+            );
+            $this->model->delete('study', $data);
+
+            $data = array(
+                'user_id' => $_GET['user_id']
+            );
+            $this->model->delete('scores', $data);
+
+            echo '<script type="text/javascript"> window.location = "index.php?c=user&a=show"</script>';
         }
     }
 
-    public function updateAction()
+    public function editAction()
     {
-        if(isset($_POST['id']))
+        if(isset($_POST['user_id']))
         {
             $this->model->load('users');
 
             $data = array(
-                'id' => $_POST['id'],
-                'username' => $_POST['username'],
+                'id' => $_POST['user_id'],
+                'username' => $_POST['user_id'],
                 'password' => $_POST['password'],
                 'email' => $_POST['email'],
                 'fullname' => $_POST['fullname'],
@@ -109,7 +146,23 @@ class User_Controller extends BK_Controller
             );
 
             $this->model->update('users',$data);
-            echo "Updated";
+            echo '<script type="text/javascript"> window.location = "index.php?c=user&a=show"</script>';
+        } else {
+            if (isset($_GET['user_id']))
+            {
+                $this->model->load('users');
+                $user = $this->model->get('users', $_GET['user_id'])[0];
+                $data = array(
+                    'title' => 'Quản lý thành viên',
+                    'user_id' => $user['id'],
+                    'fullname' => $user['fullname'],
+                    'email' => $user['email'],
+                    'password' => $user['password'],
+                    'role' => $user['role']
+                );
+                $this->view->load('005_5_manager_user_edit', $data);
+                $this->view->show();
+            }
         }
     }
 }

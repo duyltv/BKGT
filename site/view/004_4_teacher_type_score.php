@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="block-content collapse in">
-            Môn học: Trí tuệ nhân tạo
+            Môn học: <?php echo $data['subject_name']; ?>
             <div class="span12">
               <form action="index.php?c=teacher&a=type" method="POST">
                 <table class="table table-hover">
@@ -40,9 +40,11 @@
 
                         if(isset($data))
                         {
+                          $count=1;
                           foreach($data['elements'] as $title) 
                           {
-                            echo '<td><input type="text" placeholder="Nhập điểm" name="score1_'.$title['id'].'" value="" style="width: 100%;"></td>';
+                            echo '<td><input type="text" placeholder="Nhập điểm" name="score1_'.$count.'" value="" style="width: 100%;"></td>';
+                            $count=$count+1;
                           }
                         }
                       ?>
@@ -88,7 +90,7 @@ function addScore() {
     $count = 1;
     foreach($data['elements'] as $title) 
     {
-      echo 'var score_'.$title['id'].' = new_score.getElementsByTagName("input")['.($count+2).'];';
+      echo 'var score_'.$title['id'].' = new_score.getElementsByTagName("input")['.($count+1).'];';
       echo 'score_'.$title['id'].'.name = "score" + score_count + "_'.$count.'";';
       echo 'score_'.$title['id'].'.value = "";';
       $count=$count+1;

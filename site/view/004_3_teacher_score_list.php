@@ -7,7 +7,7 @@
         <div class="navbar navbar-inner block-header">
             <div class="muted pull-right"></div>
             <div class="pull-right">
-              <a href=""><span class="badge badge-warning">Chỉnh sửa điểm thành phần</span></a>
+              <a href="index.php?c=teacher&a=element&subject_id=<?php echo $data['subject_id']; ?>"><span class="badge badge-warning">Chỉnh sửa điểm thành phần</span></a>
               <a href=""><span class="badge badge-warning">Tải mẫu nhập điểm</span></a>
               <a href=""><span class="badge badge-warning">Chọn tệp bảng điểm</span></a>
               <a href="index.php?c=teacher&a=type&subject_id=<?php echo $data['subject_id']; ?>"><span class="badge badge-warning">Nhập điểm</span></a>
@@ -44,7 +44,7 @@
                           } else {
                             foreach($data['elements'] as $title) 
                             {
-                              echo '<th>'.$title.'</th>';
+                              echo '<th>'.$title['name'].'</th>';
                             }
                           }
                         }
@@ -74,7 +74,7 @@
                           {
                             if($count_ele > 3)
                             {
-                              echo '<th>'.$value.'</th>';
+                              echo '<td>'.$value.'</td>';
                             }
                             $count_ele=$count_ele+1;
                           }

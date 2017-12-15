@@ -73,7 +73,8 @@ class BK_Model_Loader
     public function get($model, $id = null )
 	{
 		$query = "SELECT * FROM $model ";
-		if( !is_null($id) ) $query .= "WHERE id = '$id'";
+		if( !is_null($id) ) 
+			$query .= "WHERE id = '$id'";
 
 		$result_q = mysqli_query($this->conn,$query);
 
@@ -195,7 +196,7 @@ class BK_Model_Loader
 
 	   	$query = "select scoretable.*,  elementtable.score_element_name
 	   	from (
-	   		select score.id as score_id, score.user_id, score.semester_id, info.subject_id, info.name as subject_name, score.score_element_id, score.score  
+	   		select score.id as score_id, score.user_id, score.semester_id, info.subject_id, info.name as subject_name, score.score_element_id, score.score, info.fomular as fomular
    			from (
    				SELECT * 
    				FROM scores
@@ -226,7 +227,7 @@ class BK_Model_Loader
    		as elementtable
    		ON scoretable.score_element_id = elementtable.score_element_id
    		group by elementtable.score_element_id
-   		order by subject_id";
+   		order by subject_id, score_element_id";
 		$result_q = mysqli_query($this->conn,$query);
 
 		$result = array();
@@ -279,15 +280,15 @@ class BK_Model_Loader
    			$this->load('users');
    		}
 
-	   	$query = "select score.semester_id, score.user_id, course_info.fullname, course_info.element_id, course_info.element_name, course_info.element_type as element_type, score 
+	   	$query = "select score.semester_id, score.user_id, course_info.fullname, course_info.element_id, course_info.element_name, score 
 	   	from (
 	   		select user_id, semester_id, score_element_id, score 
 	   		from scores
 	   	) as score 
 	   	join (
-	   		select user_subject.semester_id, user_subject.user_id, user_subject.fullname, element.id as element_id, element.name as element_name, element.type as element_type 
+	   		select user_subject.semester_id, user_subject.user_id, user_subject.fullname, element.id as element_id, element.name as element_name
 	   		from (
-	   			select id, subject_id, name, type 
+	   			select id, subject_id, name
 	   			from score_elements
 	   		) as element 
 	   		join (
@@ -308,7 +309,8 @@ class BK_Model_Loader
 	   	) as course_info 
 	   	on score.user_id = course_info.user_id 
 	   	and score.semester_id = course_info.semester_id 
-	   	and score.score_element_id = course_info.element_id";
+	   	and score.score_element_id = course_info.element_id
+	   	ORDER by user_id, element_id";
 		$result_q = mysqli_query($this->conn,$query);
 
 		$result = array();

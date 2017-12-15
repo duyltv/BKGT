@@ -2,11 +2,11 @@
  
 class Student_Controller extends BK_Controller
 {
-    private function check_exist_subject($data = array(), $subject_name, $semester_id)
+    private function check_exist_subject($data = array(), $subject_id, $semester_id)
     {
         foreach($data as $row)
         {
-            if ($row['subject_name'] == $subject_name && $row['semester_id'] == $semester_id)
+            if ($row['subject_id'] == $subject_id && $row['semester_id'] == $semester_id)
             {
                 return True;
             }
@@ -19,24 +19,28 @@ class Student_Controller extends BK_Controller
         $data_ = array();
         foreach($data as $row) 
         {
-            if ($this->check_exist_subject($data_, $row['subject_name'], $row['semester_id']))
+            if ($this->check_exist_subject($data_, $row['subject_id'], $row['semester_id']))
             {
                 $end_row = array_pop($data_); // Because input array's data is ordered by SQL
                 $append_row = array(
+                    'subject_id' => $end_row['subject_id'],
                     'subject_name' => $end_row['subject_name'],
                     'elements_score' => $end_row['elements_score'] . ', ' . $row['score_element_name'] . ': ' . $row['score'], // Append by rows
                     'total_score' => '', // Process by client
                     'semester_id' => $row['semester_id'],
+                    'fomular' => $row['fomular']
                 );
                 $data_[] = $append_row;
             }
             else
             {
                 $append_row = array(
+                    'subject_id' => $row['subject_id'],
                     'subject_name' => $row['subject_name'],
                     'elements_score' => $row['score_element_name'] . ': ' . $row['score'], // Append by rows
                     'total_score' => '', // Process by client
                     'semester_id' => $row['semester_id'],
+                    'fomular' => $row['fomular']
                 );
                 $data_[] = $append_row;
             }
@@ -57,7 +61,8 @@ class Student_Controller extends BK_Controller
 
             $data = array(
                 'title' => 'Bảng điểm cá nhân',
-                'score_table' => $print_score_table
+                'score_table' => $print_score_table,
+                'full_score_table' => $score_table
             );
             $this->view->load('003_student_view', $data);
             $this->view->show();

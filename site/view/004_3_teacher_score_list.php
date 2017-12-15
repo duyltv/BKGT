@@ -8,7 +8,7 @@
             <div class="muted pull-right"></div>
             <div class="pull-right">
               <a href="index.php?c=teacher&a=element&subject_id=<?php echo $data['subject_id']; ?>"><span class="badge badge-warning">Chỉnh sửa điểm thành phần</span></a>
-              <a href=""><span class="badge badge-warning">Tải mẫu nhập điểm</span></a>
+              <a><span class="badge badge-warning" onclick="exportTableToCSV('<?php echo $data['subject_id'];?>_score_table.csv')">Tải mẫu nhập điểm</span></a>
               <a href=""><span class="badge badge-warning">Chọn tệp bảng điểm</span></a>
               <a href="index.php?c=teacher&a=type&subject_id=<?php echo $data['subject_id']; ?>"><span class="badge badge-warning">Nhập điểm</span></a>
             </div>
@@ -18,7 +18,7 @@
             <br>
             Công thức tính điểm: <?php echo $data['fomular']; ?>
             <div class="span12">
-                <table class="table table-hover">
+                <table class="table table-hover" id="score_table">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -43,7 +43,7 @@
                               }
                               $count=$count+1;
                             }
-                          } else {
+                          } elseif (isset($data['elements'])) {
                             foreach($data['elements'] as $title) 
                             {
                               echo '<th>'.$title['name'].'</th>';
@@ -123,6 +123,52 @@
   }
 ?>
 
+</script>
+
+<script src="public/gui_design/vendors/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+function downloadCSV(csv, filename) {
+    var csvFile;
+    var downloadLink;
+
+    // CSV file
+    csvFile = new Blob([csv], {type: "text/csv"});
+
+    // Download link
+    downloadLink = document.createElement("a");
+
+    // File name
+    downloadLink.download = filename;
+
+    // Create a link to the file
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+
+    // Hide download link
+    downloadLink.style.display = "none";
+
+    // Add the link to DOM
+    document.body.appendChild(downloadLink);
+
+    // Click download link
+    downloadLink.click();
+}
+
+function exportTableToCSV(filename) {
+    var csv = [ "\ufeff" ];
+    var rows = document.querySelectorAll("table tr");
+    
+    for (var i = 0; i < rows.length; i++) {
+        var row = [], cols = rows[i].querySelectorAll("td, th");
+        
+        for (var j = 0; j < cols.length; j++) 
+            row.push(cols[j].innerText);
+        
+        csv.push(row.join(","));        
+    }
+
+    // Download CSV file
+    downloadCSV(csv.join("\n"), filename);
+}
 </script>
 
 <?php include 'public/gui_design/000_footer.php' ?>

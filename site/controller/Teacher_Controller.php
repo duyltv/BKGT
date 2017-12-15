@@ -153,19 +153,7 @@ class Teacher_Controller extends BK_Controller
                 }
             }
 
-            $score_table = $this->model->get_score_list_by_subject($subject_id);
-
-            $scores = $this->convert_scoretable_to_printable($score_table);
-
-            $data = array(
-                'title' => 'Quản lý môn học',
-                'subject_id' => $subject_id,
-                'subject_name' => $subject_name,
-                'scores' => $scores
-            );
-
-            $this->view->load('004_3_teacher_score_list', $data);
-            $this->view->show();
+            echo '<script type="text/javascript"> window.location = "index.php?c=teacher&a=scores&subject_id='.$subject_id.'" </script>';
         }
     }
 

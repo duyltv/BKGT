@@ -74,16 +74,19 @@ class Teacher_Controller extends BK_Controller
                 'title' => 'Quản lý môn học',
                 'subject_id' => $_GET['subject_id'],
                 'subject_name' => $subject_name,
-                'scores' => $scores
+                'score_table' => $scores,
+                'full_score_table' => $score_table,
+                'fomular' => $subject['fomular']
             );
 
-            if(sizeof($data['scores'])==0)
+            if(sizeof($data['score_table'])==0)
             {
                 $data = array(
                     'title' => 'Quản lý môn học',
                     'subject_id' => $_GET['subject_id'],
                     'subject_name' => $subject_name,
-                    'elements' => $this->model->get_element_list_by_subject($_GET['subject_id'])
+                    'elements' => $this->model->get_element_list_by_subject($_GET['subject_id']),
+                    'fomular' => $subject['fomular']
                 );
             }
             $this->view->load('004_3_teacher_score_list', $data);

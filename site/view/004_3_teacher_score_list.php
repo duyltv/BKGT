@@ -15,6 +15,8 @@
         </div>
         <div class="block-content collapse in">
             Môn học: <?php echo $data['subject_name']; ?>
+            <br>
+            Công thức tính điểm: <?php echo $data['fomular']; ?>
             <div class="span12">
                 <table class="table table-hover">
                   <thead>
@@ -27,9 +29,9 @@
 
                         if(isset($data))
                         {
-                          if(isset($data['scores']))
+                          if(isset($data['score_table']))
                           {
-                            $score_title = $data['scores'][0];
+                            $score_title = $data['score_table'][0];
                             $titles = array_keys($score_title);
 
                             $count=1;
@@ -55,9 +57,9 @@
                   <tbody>
                     <?php 
 
-                      if(isset($data['scores']))
+                      if(isset($data['score_table']))
                       {
-                        $scores = $data['scores'];
+                        $scores = $data['score_table'];
                         $count=1;
                         foreach($scores as $row) 
                         {
@@ -79,7 +81,7 @@
                             $count_ele=$count_ele+1;
                           }
 
-                          echo '<td></td>';
+                          echo '<td id=total'.$count.'></td>';
                           echo '</tr>';
 
                           $count=$count+1;
@@ -93,5 +95,34 @@
     </div>
     <!-- /block -->
 </div>
+
+<script>
+
+<?php
+  $score_table = $data['score_table'];
+  $full_score_table = $data['full_score_table'];
+  $count=1;
+  foreach($score_table as $row) 
+  {
+    echo 'var score_'.$count.'=[ 0, ';
+    $score = array();
+    $score[] = $row['user_id'];
+    foreach($full_score_table as $full_row)
+    {
+      if($row['user_id'] == $full_row['user_id'])
+      {
+        $score[]=$full_row['score'];
+        echo $full_row['score'].', ';
+      }
+    }
+    echo '];';
+    echo 'var fomular_'.$count.'="'.$data['fomular'].'";';
+    echo 'var fomular_value = fomular_'.$count.'.replace(/score([0-9]+)/g,"score_'.$count.'[$1]");';
+    echo 'document.getElementById("total'.$count.'").innerHTML=eval(fomular_value);';
+    $count=$count+1;
+  }
+?>
+
+</script>
 
 <?php include 'public/gui_design/000_footer.php' ?>

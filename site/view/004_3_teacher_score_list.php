@@ -154,7 +154,7 @@ function downloadCSV(csv, filename) {
 }
 
 function exportTableToCSV(filename) {
-    var csv = [ "\ufeff" ];
+    var csv = [];
     var rows = document.querySelectorAll("table tr");
     
     for (var i = 0; i < rows.length; i++) {
@@ -163,7 +163,7 @@ function exportTableToCSV(filename) {
         for (var j = 0; j < cols.length; j++) 
             row.push(cols[j].innerText);
         
-        csv.push(row.join(","));        
+        csv.push("\ufeff" + row.join(","));        
     }
 
     // Download CSV file

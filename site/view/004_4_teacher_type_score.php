@@ -79,10 +79,6 @@ function addScore() {
   score_mssv.name = "mssv" + score_count;
   score_mssv.value = "";
 
-  var score_name = new_score.getElementsByTagName("input")[2];
-  score_name.name = "svname" + score_count;
-  score_name.value = "";
-
   <?php 
 
   if(isset($data))
@@ -106,5 +102,60 @@ function addScore() {
   document.getElementById("score_count").value=score_count;
 }
 </script>
+
+<!-- BEGIN CLIENTSIDE_FILE_SUBMIT  -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+$(function () {
+    $("#upload").bind("click", function () {
+        $("#fileUpload").click();
+    });
+});
+function process() {
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
+        if (regex.test($("#fileUpload").val().toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    //var table = $("<table />");
+                    var rows = e.target.result.split("\n");
+                    var intput_order = 0;
+                    for (var i = 0; i < rows.length; i++) {
+                        //var row = $("<tr />");
+                        var cells = rows[i].split(",");
+                        for (var j = 0; j < cells.length; j++) {
+                            //var cell = $("<td />");
+                            //cell.html(cells[j]);
+                            //row.append(cell);
+
+                            // Test
+                            if (i>0)
+                            {
+                              if (j>0 && j!=3 && j!=cells.length-1) {
+                                document.getElementsByTagName("input")[intput_order].value = cells[j];
+                                intput_order+=1;
+                              }
+                            }
+                        }
+                        addScore();
+                        //table.append(row);
+                    }
+                    //$("#dvCSV").html('');
+                    //$("#dvCSV").append(table);
+                }
+                reader.readAsText($("#fileUpload")[0].files[0]);
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid CSV file.");
+        }
+ };
+</script>
+<input type="file" id="fileUpload" onchange="process()" hidden/>
+<input type="button" id="upload" value="Upload" />
+<hr />
+<div id="dvCSV">
+</div>
 
 <?php include 'public/gui_design/000_footer.php' ?>

@@ -131,6 +131,11 @@ class Teacher_Controller extends BK_Controller
                 $semester_id = $_POST['semester'.$i];
                 $student_id = $_POST['mssv'.$i];
 
+                // Check if score record exists
+                //$score_record = $this->model->get_condition('scores', )
+
+                // Insert into database
+
                 $data = array(
                     'subject_id' => $subject_id,
                     'semester_id' => $semester_id,

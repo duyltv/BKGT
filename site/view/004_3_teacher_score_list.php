@@ -8,7 +8,7 @@
             <div class="muted pull-right"></div>
             <div class="pull-right">
               <a href="index.php?c=teacher&a=element&subject_id=<?php echo $data['subject_id']; ?>&update=1"><span class="badge badge-warning">Chỉnh sửa điểm thành phần</span></a>
-              <span class="badge badge-warning" style="cursor: pointer;" onclick="exportTableToCSV('<?php echo $data['subject_id'];?>_score_table.csv')">Tải mẫu nhập điểm</span>
+              <span class="badge badge-warning" style="cursor: pointer;" onclick="exportTableToCSV('<?php echo $data['subject_id'];?>_score_table.csv')">Tải bảng điểm</span>
               <a href="index.php?c=teacher&a=type&subject_id=<?php echo $data['subject_id']; ?>"><span class="badge badge-warning">Nhập điểm</span></a>
               <span class="badge badge-warning" style="cursor: pointer;" onclick='$("#subject_status").show();'>Hiện thống kê</span>
             </div>
@@ -177,7 +177,7 @@ function exportTableToCSV(filename) {
 function readTableToArray()
 {
   var csv = [];
-  var rows = document.querySelectorAll("table tr");
+  var rows = document.getElementById('score_table').querySelectorAll("table tr");
   
   for (var i = 0; i < rows.length; i++) {
       var row = [], cols = rows[i].querySelectorAll("td, th");
@@ -231,11 +231,6 @@ function drawChartPass() {
   var chart = new google.visualization.PieChart(document.getElementById('passChart'));
   chart.draw(data, options);
 }
-
-
-
-
-
 
 // Draw elements graphs
 </script>

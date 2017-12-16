@@ -7,7 +7,8 @@
         <div class="navbar navbar-inner block-header">
             <div class="muted pull-right"></div>
             <div class="pull-right">
-              <span class="badge badge-warning" style="cursor: pointer;" onclick='$("#fileUpload").click();'>Tải tệp điểm</span>
+              <span class="badge badge-warning" style="cursor: pointer;" onclick="exportTableToCSV('<?php echo $data['subject_id'];?>_score_table.csv')">Tải mẫu nhập điểm</span>
+              <span class="badge badge-warning" style="cursor: pointer;" onclick='$("#fileUpload").click();'>Tải lên tệp điểm</span>
             </div>
         </div>
         <div class="block-content collapse in">
@@ -133,7 +134,7 @@ function process() {
                             // Test
                             if (i>0)
                             {
-                              if (j>0 && j!=3 && j!=cells.length-1) {
+                              if (j>0) {
                                 document.getElementsByTagName("input")[intput_order].value = cells[j];
                                 intput_order+=1;
                               }
@@ -154,5 +155,50 @@ function process() {
 <hr />
 <div id="dvCSV">
 </div>
+<script src="public/gui_design/vendors/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+function downloadCSV(csv, filename) {
+    var csvFile;
+    var downloadLink;
+
+    // CSV file
+    csvFile = new Blob([csv], {type: "text/csv"});
+
+    // Download link
+    downloadLink = document.createElement("a");
+
+    // File name
+    downloadLink.download = filename;
+
+    // Create a link to the file
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+
+    // Hide download link
+    downloadLink.style.display = "none";
+
+    // Add the link to DOM
+    document.body.appendChild(downloadLink);
+
+    // Click download link
+    downloadLink.click();
+}
+
+function exportTableToCSV(filename) {
+    var csv = [];
+    var rows = document.querySelectorAll("table tr");
+    
+    for (var i = 0; i < rows.length; i++) {
+        var row = [], cols = rows[i].querySelectorAll("td, th");
+        
+        for (var j = 0; j < cols.length; j++) 
+            row.push(cols[j].innerText);
+        
+        csv.push("\ufeff" + row.join(","));        
+    }
+
+    // Download CSV file
+    downloadCSV(csv.join("\n"), filename);
+}
+</script>
 
 <?php include 'public/gui_design/000_footer.php' ?>

@@ -7,8 +7,7 @@
     <div class="block">
         <div class="navbar navbar-inner block-header">
             <div class="muted pull-left">Chào mừng các bạn đến với Bach Khoa Grade Tracer</div>
-            <div class="pull-right"><span class="badge badge-warning">View More</span>
-
+            <div class="pull-right">
             </div>
         </div>
         <div class="block-content collapse in" id="content">
@@ -42,8 +41,7 @@
     <div class="block">
         <div class="navbar navbar-inner block-header">
             <div class="muted pull-left">Những điều nên biết</div>
-            <div class="pull-right"><span class="badge badge-warning">View More</span>
-
+            <div class="pull-right">
             </div>
         </div>
         <div class="block-content collapse in">

@@ -1,4 +1,4 @@
-        FOOTER Copyright (C) 2017
+        BKGT Copyright (C) 2017
         <!--/.fluid-container-->
         <script src="public/gui_design/vendors/jquery-1.9.1.min.js"></script>
         <script src="public/gui_design/bootstrap/js/bootstrap.min.js"></script>

@@ -77,9 +77,6 @@
                                     <li <?php if ($data['title'] == 'Quản lý thành viên') echo 'class="active"' ?>>
                                         <a href="index.php?c=user&a=show">Quản lý thành viên</a>
                                     </li>
-                                    <li <?php if ($data['title'] == 'Quản lý tiêu chuẩn') echo 'class="active"' ?>>
-                                        <a href="index.php?c=standard&a=show">Quản lý tiêu chuẩn</a>
-                                    </li>
                                 <?php } ?>
                             <?php } ?>
                         </ul>

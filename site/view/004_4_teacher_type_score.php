@@ -7,6 +7,7 @@
         <div class="navbar navbar-inner block-header">
             <div class="muted pull-right"></div>
             <div class="pull-right">
+              <span class="badge badge-warning" style="cursor: pointer;" onclick='$("#fileUpload").click();'>Tải tệp điểm</span><
             </div>
         </div>
         <div class="block-content collapse in">
@@ -53,7 +54,7 @@
                 </table>
                 <input hidden name="score_count" id="score_count" value=1>
                 <input hidden name="subject_id" id="subject_id" value=<?php echo $data['subject_id']; ?>>
-                <a onclick="addScore()">Thêm hàng nhập điểm</a><br>
+                <a style="cursor: pointer;" onclick="addScore()">Thêm hàng nhập điểm</a><br>
                 <center><button type="submit">NHẬP ĐIỂM</button></center>
               </form>
             </div>
@@ -121,12 +122,13 @@ function process() {
                     var rows = e.target.result.split("\n");
                     var intput_order = 0;
                     for (var i = 0; i < rows.length; i++) {
+                        if (i != 0)
+                        {
+                          addScore();
+                        }
                         //var row = $("<tr />");
                         var cells = rows[i].split(",");
                         for (var j = 0; j < cells.length; j++) {
-                            //var cell = $("<td />");
-                            //cell.html(cells[j]);
-                            //row.append(cell);
 
                             // Test
                             if (i>0)
@@ -137,11 +139,7 @@ function process() {
                               }
                             }
                         }
-                        addScore();
-                        //table.append(row);
                     }
-                    //$("#dvCSV").html('');
-                    //$("#dvCSV").append(table);
                 }
                 reader.readAsText($("#fileUpload")[0].files[0]);
             } else {
@@ -153,7 +151,6 @@ function process() {
  };
 </script>
 <input type="file" id="fileUpload" onchange="process()" hidden/>
-<input type="button" id="upload" value="Upload" />
 <hr />
 <div id="dvCSV">
 </div>

@@ -44,7 +44,7 @@
                 </table>
             </div>
             <input hidden name="out_count" id="out_count" value=1>
-            <a onclick="addOutcome()">Thêm outcome</a><br>
+            <a style="cursor: pointer;" onclick="addOutcome()">Thêm outcome</a><br>
             <center><button type="submit">TẠO MÔN HỌC</button></center>
           </form>
         </div>

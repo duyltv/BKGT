@@ -7,10 +7,10 @@
         <div class="navbar navbar-inner block-header">
             <div class="muted pull-right"></div>
             <div class="pull-right">
-              <a href="index.php?c=teacher&a=element&subject_id=<?php echo $data['subject_id']; ?>"><span class="badge badge-warning">Chỉnh sửa điểm thành phần</span></a>
-              <a><span class="badge badge-warning" onclick="exportTableToCSV('<?php echo $data['subject_id'];?>_score_table.csv')">Tải mẫu nhập điểm</span></a>
-              <a href=""><span class="badge badge-warning">Chọn tệp bảng điểm</span></a>
+              <a href="index.php?c=teacher&a=element&subject_id=<?php echo $data['subject_id']; ?>&update=1"><span class="badge badge-warning">Chỉnh sửa điểm thành phần</span></a>
+              <span class="badge badge-warning" style="cursor: pointer;" onclick="exportTableToCSV('<?php echo $data['subject_id'];?>_score_table.csv')">Tải mẫu nhập điểm</span>
               <a href="index.php?c=teacher&a=type&subject_id=<?php echo $data['subject_id']; ?>"><span class="badge badge-warning">Nhập điểm</span></a>
+              <span class="badge badge-warning" style="cursor: pointer;" onclick='$("#subject_status").show();'>Hiện thống kê</span>
             </div>
         </div>
         <div class="block-content collapse in">
@@ -170,5 +170,75 @@ function exportTableToCSV(filename) {
     downloadCSV(csv.join("\n"), filename);
 }
 </script>
+<div id="subject_status">
+<center><div id="passChart"></div></center>
+<script src="public/js/loader.js"></script>
+<script type="text/javascript">
+function readTableToArray()
+{
+  var csv = [];
+  var rows = document.querySelectorAll("table tr");
+  
+  for (var i = 0; i < rows.length; i++) {
+      var row = [], cols = rows[i].querySelectorAll("td, th");
+      
+      for (var j = 0; j < cols.length; j++) 
+          row.push(cols[j].innerText);
+      
+      csv.push(row);        
+  }
+
+  return csv;
+}
+
+// Draw total graph
+function makeTotalArray(data)
+{
+  var total_array = [['Trạng thái', 'Số sinh viên']];
+  var nPass = 0;
+  var nFail = 0;
+
+  for (var i = 0; i < data.length; i++)
+  {
+    var row = data[i];
+    var total_score = row[row.length-1];
+    if (total_score>=5)
+      nPass++;
+    else
+      nFail++;
+  }
+  total_array.push(['Đậu', nPass]);
+  total_array.push(['Rớt', nFail]);
+  return total_array;
+}
+
+var table_array = readTableToArray();
+var total_array = makeTotalArray(table_array);
+// Load google charts
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChartPass);
+
+$("#subject_status").hide();
+
+// Draw the chart and set the chart values
+function drawChartPass() {
+  var data = google.visualization.arrayToDataTable(total_array);
+
+  // Optional; add a title and set the width and height of the chart
+  var options = {'title':'Tỉ lệ qua môn', 'width':600, 'height':400};
+
+  // Display the chart inside the <div> element with id="piechart"
+  var chart = new google.visualization.PieChart(document.getElementById('passChart'));
+  chart.draw(data, options);
+}
+
+
+
+
+
+
+// Draw elements graphs
+</script>
+</div>
 
 <?php include 'public/gui_design/000_footer.php' ?>

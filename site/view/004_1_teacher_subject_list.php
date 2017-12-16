@@ -27,7 +27,7 @@
                       $count=1;
                       foreach($subjects as $row) 
                       {
-                        echo '<tr onclick="window.location.href=\'index.php?c=teacher&a=scores&subject_id=' . $row['subject_id'] . '\';">';
+                        echo '<tr style="cursor: pointer;" onclick="window.location.href=\'index.php?c=teacher&a=scores&subject_id=' . $row['subject_id'] . '\';">';
                         echo '<td>';
                         echo $count;
                         echo '</td>';

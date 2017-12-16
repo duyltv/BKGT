@@ -128,11 +128,13 @@ class Teacher_Controller extends BK_Controller
 
             for ($i = 1; $i <= $score_count; $i++) 
             {
+                if (empty($_POST['semester'.$i]))
+                    break;
                 $semester_id = $_POST['semester'.$i];
                 $student_id = $_POST['mssv'.$i];
 
                 // Check if score record exists
-                //$score_record = $this->model->get_condition('scores', )
+                $score_record = $this->model->get_condition('scores', 'user_id = '.$student_id.' AND semester_id = '.$semester_id);
 
                 // Insert into database
 
@@ -196,6 +198,8 @@ class Teacher_Controller extends BK_Controller
             // Insert outcomes
             for ($i = 1; $i <= $outcome_count; $i++) 
             {
+                if (empty($outcomes[$i]))
+                    continue;
                 $outcome = $outcomes[$i];
                 $outcome_data = array(
                     'subject_id' => $subject_id,

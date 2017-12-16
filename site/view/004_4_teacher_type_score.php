@@ -7,7 +7,7 @@
         <div class="navbar navbar-inner block-header">
             <div class="muted pull-right"></div>
             <div class="pull-right">
-              <span class="badge badge-warning" style="cursor: pointer;" onclick='$("#fileUpload").click();'>Tải tệp điểm</span><
+              <span class="badge badge-warning" style="cursor: pointer;" onclick='$("#fileUpload").click();'>Tải tệp điểm</span>
             </div>
         </div>
         <div class="block-content collapse in">

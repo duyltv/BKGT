@@ -2,10 +2,6 @@
  
 /**
  * @package     BK_Framework
- * @author      Freetuts Dev Team
- * @email       freetuts.net@gmail.com
- * @copyright   Copyright (c) 2015
- * @since       Version 1.0
  * @filesource  system/core/BK_Controller.php
  */
 class BK_Controller

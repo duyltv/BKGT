@@ -70,13 +70,16 @@ class Teacher_Controller extends BK_Controller
             $subject = $this->model->get('subjects', $_GET['subject_id'])[0];
             $subject_name = $subject['name'];
 
+            $standard = $this->model->get_standard_table_by_subject($_GET['subject_id']);
+
             $data = array(
                 'title' => 'Quản lý môn học',
                 'subject_id' => $_GET['subject_id'],
                 'subject_name' => $subject_name,
                 'score_table' => $scores,
                 'full_score_table' => $score_table,
-                'fomular' => $subject['fomular']
+                'fomular' => $subject['fomular'],
+                'standard' => $standard
             );
 
             if(sizeof($data['score_table'])==0)

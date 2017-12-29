@@ -343,4 +343,125 @@ class BK_Model_Loader
 
 		return $result;
    	}
+
+   	public function get_standard_table_by_subject($subject_id = "")
+   	{
+   		if ($subject_id == "")
+   		{
+   			return [];
+   		}
+
+   		if ($this->conn == NULL)
+   		{
+   			$this->load('subjects');
+   		}
+
+   		$query = "SELECT CONCAT(pass.outcome_des,'(',pass.score_element_des,')') as name,
+		       pass.pass,
+		       fail.fail
+		FROM   (
+		                SELECT   outcome_id,
+		                         outcome_des,
+		                         score_element_id,
+		                         score_element_des,
+		                         Count(score) AS pass
+		                FROM     (
+		                                  SELECT   out_ele.outcome_id,
+		                                           out_ele.outcome_des,
+		                                           out_ele.score_element_id,
+		                                           out_ele.score_element_des,
+		                                           scores.score
+		                                  FROM     (
+		                                                  SELECT outcome_id,
+		                                                         description AS outcome_des,
+		                                                         score_element_id,
+		                                                         name AS score_element_des
+		                                                  FROM   (
+		                                                                  SELECT   outcome_id,
+		                                                                           score_element_id,
+		                                                                           description
+		                                                                  FROM     (
+		                                                                                  SELECT *
+		                                                                                  FROM   outcomes_of_score_element) AS out_of_ele
+		                                                                  JOIN
+		                                                                           (
+		                                                                                  SELECT *
+		                                                                                  FROM   outcomes
+		                                                                                  WHERE  subject_id = ".$subject_id.") AS outcome
+		                                                                  ON       out_of_ele.outcome_id = outcome.id
+		                                                                  ORDER BY outcome_id) AS outs
+		                                                  JOIN
+		                                                         (
+		                                                                SELECT *
+		                                                                FROM   score_elements
+		                                                                WHERE  subject_id = ".$subject_id.") AS ele
+		                                                  ON     outs.score_element_id = ele.id) AS out_ele
+		                                  JOIN
+		                                           (
+		                                                  SELECT score_element_id,
+		                                                         score
+		                                                  FROM   scores) AS scores
+		                                  ON       out_ele.score_element_id = scores.score_element_id
+		                                  ORDER BY outcome_id) as score_table
+		                WHERE    score >= 5
+		                GROUP BY outcome_id,
+		                         score_element_id) AS pass
+		JOIN
+		       (
+		                SELECT   outcome_id,
+		                         outcome_des,
+		                         score_element_id,
+		                         score_element_des,
+		                         Count(score) AS fail
+		                FROM     (
+		                                  SELECT   out_ele.outcome_id,
+		                                           out_ele.outcome_des,
+		                                           out_ele.score_element_id,
+		                                           out_ele.score_element_des,
+		                                           scores.score
+		                                  FROM     (
+		                                                  SELECT outcome_id,
+		                                                         description AS outcome_des,
+		                                                         score_element_id,
+		                                                         name AS score_element_des
+		                                                  FROM   (
+		                                                                  SELECT   outcome_id,
+		                                                                           score_element_id,
+		                                                                           description
+		                                                                  FROM     (
+		                                                                                  SELECT *
+		                                                                                  FROM   outcomes_of_score_element) AS out_of_ele
+		                                                                  JOIN
+		                                                                           (
+		                                                                                  SELECT *
+		                                                                                  FROM   outcomes
+		                                                                                  WHERE  subject_id = ".$subject_id.") AS outcome
+		                                                                  ON       out_of_ele.outcome_id = outcome.id
+		                                                                  ORDER BY outcome_id) AS outs
+		                                                  JOIN
+		                                                         (
+		                                                                SELECT *
+		                                                                FROM   score_elements
+		                                                                WHERE  subject_id = ".$subject_id.") AS ele
+		                                                  ON     outs.score_element_id = ele.id) AS out_ele
+		                                  JOIN
+		                                           (
+		                                                  SELECT score_element_id,
+		                                                         score
+		                                                  FROM   scores) AS scores
+		                                  ON       out_ele.score_element_id = scores.score_element_id
+		                                  ORDER BY outcome_id) as score_table
+		                WHERE    score < 5
+		                GROUP BY outcome_id,
+		                         score_element_id ) AS fail
+		ON     pass.outcome_id = fail.outcome_id and pass.score_element_id = fail.score_element_id";
+		$result_q = mysqli_query($this->conn,$query);
+
+		$result = array();
+		while ($row = mysqli_fetch_array($result_q, MYSQLI_ASSOC)) {
+			$result[] = $row;
+		}
+
+		return $result;
+   	}
 }

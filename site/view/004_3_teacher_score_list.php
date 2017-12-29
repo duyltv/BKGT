@@ -171,68 +171,90 @@ function exportTableToCSV(filename) {
 }
 </script>
 <div id="subject_status">
-<center><div id="passChart"></div></center>
+<?php
+    $count = 0;
+
+    foreach ($data['standard'] as $element)
+    {
+      echo '<div id="chart_'. $count .'"></div>';
+      $count = $count + 1;
+    }
+?>
 <script src="public/js/loader.js"></script>
 <script type="text/javascript">
-function readTableToArray()
-{
-  var csv = [];
-  var rows = document.getElementById('score_table').querySelectorAll("table tr");
-  
-  for (var i = 0; i < rows.length; i++) {
-      var row = [], cols = rows[i].querySelectorAll("td, th");
-      
-      for (var j = 0; j < cols.length; j++) 
-          row.push(cols[j].innerText);
-      
-      csv.push(row);        
-  }
+<?php
+    $count = 0;
 
-  return csv;
+    foreach ($data['standard'] as $element)
+    {
+      echo 'var chart_name'.$count.' = "";';
+      echo 'var total_array'.$count.' = [];';
+
+      $count = $count + 1;
+    }
+?>
+
+//
+// PHP Array description
+// $data = array (
+//    ['name'] => 'title of chart',
+//    ['pass'] => number_of_pass,
+//    ['fail'] => number_of_fail
+// )
+//
+function parsePHPArrayToJSArray()
+{
+  <?php
+    $count = 0;
+
+    foreach ($data['standard'] as $element)
+    {
+      $chart_name = $element['name'];
+      $chart_pass = $element['pass'];
+      $chart_fail = $element['fail'];
+
+      echo 'total_array'.$count.' = [];';
+
+      echo 'var chart_title' . $count . ' = ["Trạng thái", "Số lượng"];';
+      echo 'chart_name' . $count . ' = "' . $chart_name . '";';
+      echo 'var chart_pass' . $count . ' = ["Đạt", ' . $chart_pass . '];';
+      echo 'var chart_fail' . $count . ' = ["Không đạt", ' . $chart_fail . '];';
+      echo 'total_array'.$count.'.push(chart_title' . $count . ');';
+      echo 'total_array'.$count.'.push(chart_pass' . $count . ');';
+      echo 'total_array'.$count.'.push(chart_fail' . $count . ');';
+
+      $count = $count + 1;
+    }
+    // Load google charts
+    echo 'google.charts.load("current", {"packages":["corechart"]});';
+    echo 'google.charts.setOnLoadCallback(drawChartPass);';
+  ?>
 }
 
-// Draw total graph
-function makeTotalArray(data)
-{
-  var total_array = [['Trạng thái', 'Số sinh viên']];
-  var nPass = 0;
-  var nFail = 0;
-
-  for (var i = 0; i < data.length; i++)
-  {
-    var row = data[i];
-    var total_score = row[row.length-1];
-    if (total_score>=5)
-      nPass++;
-    else
-      nFail++;
-  }
-  total_array.push(['Đậu', nPass]);
-  total_array.push(['Rớt', nFail]);
-  return total_array;
-}
-
-var table_array = readTableToArray();
-var total_array = makeTotalArray(table_array);
-// Load google charts
-google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChartPass);
-
+parsePHPArrayToJSArray();
 $("#subject_status").hide();
 
 // Draw the chart and set the chart values
 function drawChartPass() {
-  var data = google.visualization.arrayToDataTable(total_array);
+<?php
+    $count = 0;
 
-  // Optional; add a title and set the width and height of the chart
-  var options = {'title':'Tỉ lệ qua môn', 'width':600, 'height':400};
+    foreach ($data['standard'] as $element)
+    {  
+      echo 'var data'.$count.' = google.visualization.arrayToDataTable(total_array'.$count.');';
 
-  // Display the chart inside the <div> element with id="piechart"
-  var chart = new google.visualization.PieChart(document.getElementById('passChart'));
-  chart.draw(data, options);
+      // Optional; add a title and set the width and height of the chart
+      echo "var options".$count." = {'title':chart_name".$count.", 'width':400, 'height':300};";
+
+      // Display the chart inside the <div> element with id="piechart"
+      echo 'var chart'.$count.' = new google.visualization.PieChart(document.getElementById("chart_'.$count.'"));';
+      echo 'chart'.$count.'.draw(data'.$count.', options'.$count.');';
+
+      $count = $count + 1;
+    }
+?>
 }
 
-// Draw elements graphs
 </script>
 </div>
 

@@ -26,7 +26,7 @@
                       <th>MSSV</th>
                       <th>Họ và tên SV</th>
                       <?php 
-
+                        $element_count = 1;
                         if(isset($data))
                         {
                           if(isset($data['score_table']))
@@ -40,9 +40,11 @@
                               if($count > 3)
                               {
                                 echo '<th>'.$title.'</th>';
+                                $element_count=$element_count+1;
                               }
                               $count=$count+1;
                             }
+                            $element_count=$element_count-1;
                           } elseif (isset($data['elements'])) {
                             foreach($data['elements'] as $title) 
                             {
@@ -56,7 +58,7 @@
                   </thead>
                   <tbody>
                     <?php 
-
+                      
                       if(isset($data['score_table']))
                       {
                         $scores = $data['score_table'];
@@ -155,7 +157,8 @@ function downloadCSV(csv, filename) {
 
 function exportTableToCSV(filename) {
     var csv = [];
-    var rows = document.querySelectorAll("table tr");
+    var score_table = document.getElementById("score_table");
+    var rows = score_table.querySelectorAll("table tr");
     
     for (var i = 0; i < rows.length; i++) {
         var row = [], cols = rows[i].querySelectorAll("td, th");
@@ -171,15 +174,25 @@ function exportTableToCSV(filename) {
 }
 </script>
 <div id="subject_status">
+<table>
+<tr>
 <?php
     $count = 0;
-
+    if ($element_count > 1)
     foreach ($data['standard'] as $element)
     {
+      echo '<td>';
       echo '<div id="chart_'. $count .'"></div>';
+      echo '</td>';
+      if ($count % 3 == 2)
+      {
+        echo '</tr><tr>';
+      }
       $count = $count + 1;
     }
 ?>
+</tr>
+</table>
 <script src="public/js/loader.js"></script>
 <script type="text/javascript">
 <?php

@@ -93,7 +93,9 @@ $global_count = 1;
             Công thức điểm tổng kết
             <br>
             <input type="text" placeholder="Công thức tính" name="fomular" style="width:100%;" <?php if(isset($data['subject_fomular'])) echo 'value="'.$data['subject_fomular'].'"'; ?> required>
-            <center><button type="submit">LƯU</button></center>
+            <?php if(!isset($_GET['update'])) 
+            echo '<center><button type="submit">LƯU</button></center>';
+            ?>
           </form>
         </div>
     </div>

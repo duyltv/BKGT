@@ -7,7 +7,7 @@
         <div class="navbar navbar-inner block-header">
             <div class="muted pull-right"></div>
             <div class="pull-right">
-              <a href="index.php?c=teacher&a=element&subject_id=<?php echo $data['subject_id']; ?>&update=1"><span class="badge badge-warning">Chỉnh sửa điểm thành phần</span></a>
+              <a href="index.php?c=teacher&a=element&subject_id=<?php echo $data['subject_id']; ?>&update=1"><span class="badge badge-warning">Xem cấu trúc điểm thành phần</span></a>
               <span class="badge badge-warning" style="cursor: pointer;" onclick="exportTableToCSV('<?php echo $data['subject_id'];?>_score_table.csv')">Tải bảng điểm</span>
               <a href="index.php?c=teacher&a=type&subject_id=<?php echo $data['subject_id']; ?>"><span class="badge badge-warning">Nhập điểm</span></a>
               <span class="badge badge-warning" style="cursor: pointer;" onclick='$("#subject_status").show();'>Hiện thống kê</span>

@@ -356,7 +356,7 @@ class BK_Model_Loader
    			$this->load('subjects');
    		}
 
-   		$query = "SELECT pass.outcome_des, pass.score_element_des,pass.pass,fail.fail
+   		$query = "SELECT pass.outcome_des, pass.score_element_des,IFNULL(pass.pass,0) as pass,IFNULL(fail.fail,0) as fail
 		FROM   (
 		                SELECT   outcome_id,
 		                         outcome_des,
@@ -404,7 +404,7 @@ class BK_Model_Loader
 		                WHERE    score >= 5
 		                GROUP BY outcome_id,
 		                         score_element_id) AS pass
-		JOIN
+		LEFT OUTER JOIN
 		       (
 		                SELECT   outcome_id,
 		                         outcome_des,

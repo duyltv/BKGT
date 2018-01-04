@@ -123,6 +123,8 @@ function process() {
                     var rows = e.target.result.split("\n");
                     var intput_order = 0;
                     for (var i = 0; i < rows.length; i++) {
+                        if (rows[i] == "")
+                          continue;
                         if (i != 0)
                         {
                           addScore();

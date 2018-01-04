@@ -174,36 +174,39 @@ function exportTableToCSV(filename) {
 }
 </script>
 <div id="subject_status">
-<table>
-<tr>
 <?php
     $count = 0;
     if ($element_count > 1)
-    foreach ($data['standard'] as $element)
+    foreach ($data['standard'] as $standard)
     {
-      echo '<td>';
-      echo '<div id="chart_'. $count .'"></div>';
-      echo '</td>';
-      if ($count % 3 == 2)
+      echo $standard['outcome_des'];
+      echo '<table>';
+      echo '<tr>';
+      foreach ($standard['score_element'] as $element)
       {
-        echo '</tr><tr>';
+        echo '<td>';
+        echo '<div id="chart_'. $count .'"></div>';
+        echo '</td>';
+        $count = $count + 1;
       }
-      $count = $count + 1;
+      echo '</tr>';
+      echo '</table>';
     }
 ?>
-</tr>
-</table>
 <script src="public/js/loader.js"></script>
 <script type="text/javascript">
 <?php
     $count = 0;
 
-    foreach ($data['standard'] as $element)
+    foreach ($data['standard'] as $standard)
     {
-      echo 'var chart_name'.$count.' = "";';
-      echo 'var total_array'.$count.' = [];';
+      foreach ($standard['score_element'] as $element)
+      {
+        echo 'var chart_name'.$count.' = "";';
+        echo 'var total_array'.$count.' = [];';
 
-      $count = $count + 1;
+        $count = $count + 1;
+      }
     }
 ?>
 
@@ -220,23 +223,26 @@ function parsePHPArrayToJSArray()
   <?php
     $count = 0;
 
-    foreach ($data['standard'] as $element)
+    foreach ($data['standard'] as $standard)
     {
-      $chart_name = $element['name'];
-      $chart_pass = $element['pass'];
-      $chart_fail = $element['fail'];
+      foreach ($standard['score_element'] as $element)
+      {
+        $chart_name = $element['score_element_des'];
+        $chart_pass = $element['pass'];
+        $chart_fail = $element['fail'];
 
-      echo 'total_array'.$count.' = [];';
+        echo 'total_array'.$count.' = [];';
 
-      echo 'var chart_title' . $count . ' = ["Trạng thái", "Số lượng"];';
-      echo 'chart_name' . $count . ' = "' . $chart_name . '";';
-      echo 'var chart_pass' . $count . ' = ["Đạt", ' . $chart_pass . '];';
-      echo 'var chart_fail' . $count . ' = ["Không đạt", ' . $chart_fail . '];';
-      echo 'total_array'.$count.'.push(chart_title' . $count . ');';
-      echo 'total_array'.$count.'.push(chart_pass' . $count . ');';
-      echo 'total_array'.$count.'.push(chart_fail' . $count . ');';
+        echo 'var chart_title' . $count . ' = ["Trạng thái", "Số lượng"];';
+        echo 'chart_name' . $count . ' = "' . $chart_name . '";';
+        echo 'var chart_pass' . $count . ' = ["Đạt", ' . $chart_pass . '];';
+        echo 'var chart_fail' . $count . ' = ["Không đạt", ' . $chart_fail . '];';
+        echo 'total_array'.$count.'.push(chart_title' . $count . ');';
+        echo 'total_array'.$count.'.push(chart_pass' . $count . ');';
+        echo 'total_array'.$count.'.push(chart_fail' . $count . ');';
 
-      $count = $count + 1;
+        $count = $count + 1;
+      }
     }
     // Load google charts
     echo 'google.charts.load("current", {"packages":["corechart"]});';
@@ -252,18 +258,21 @@ function drawChartPass() {
 <?php
     $count = 0;
 
-    foreach ($data['standard'] as $element)
+    foreach ($data['standard'] as $standard)
     {  
-      echo 'var data'.$count.' = google.visualization.arrayToDataTable(total_array'.$count.');';
+      foreach ($standard['score_element'] as $element)
+      {
+        echo 'var data'.$count.' = google.visualization.arrayToDataTable(total_array'.$count.');';
 
-      // Optional; add a title and set the width and height of the chart
-      echo "var options".$count." = {'title':chart_name".$count.", 'width':400, 'height':300};";
+        // Optional; add a title and set the width and height of the chart
+        echo "var options".$count." = {'title':chart_name".$count.", 'width':400, 'height':300};";
 
-      // Display the chart inside the <div> element with id="piechart"
-      echo 'var chart'.$count.' = new google.visualization.PieChart(document.getElementById("chart_'.$count.'"));';
-      echo 'chart'.$count.'.draw(data'.$count.', options'.$count.');';
+        // Display the chart inside the <div> element with id="piechart"
+        echo 'var chart'.$count.' = new google.visualization.PieChart(document.getElementById("chart_'.$count.'"));';
+        echo 'chart'.$count.'.draw(data'.$count.', options'.$count.');';
 
-      $count = $count + 1;
+        $count = $count + 1;
+      }
     }
 ?>
 }

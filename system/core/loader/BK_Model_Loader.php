@@ -356,9 +356,7 @@ class BK_Model_Loader
    			$this->load('subjects');
    		}
 
-   		$query = "SELECT CONCAT(pass.outcome_des,'(',pass.score_element_des,')') as name,
-		       pass.pass,
-		       fail.fail
+   		$query = "SELECT pass.outcome_des, pass.score_element_des,pass.pass,fail.fail
 		FROM   (
 		                SELECT   outcome_id,
 		                         outcome_des,

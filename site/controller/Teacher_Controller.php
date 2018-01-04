@@ -57,6 +57,39 @@ class Teacher_Controller extends BK_Controller
         }
     }
 
+    private function convert_standard_to_structure($standard_raw = array())
+    {
+        $standard = array();
+        foreach ($standard_raw as $std_row)
+        {
+            $row_out = $std_row['outcome_des'];
+            $exists = false;
+
+            $element = array(
+                'score_element_des' => $std_row['score_element_des'],
+                'pass' => $std_row['pass'],
+                'fail' => $std_row['fail']
+                );
+            $count = 0;
+            foreach ($standard as $std) {
+                if ($std['outcome_des'] == $row_out)
+                {
+                    $standard[$count]['score_element'][] = $element;
+                    //$std['score_element'][] = $element;
+                    $exists = true;
+                }
+
+                $count = $count + 1;
+            }
+            if ($exists == false)
+                $standard[] = array(
+                    'outcome_des' => $row_out,
+                    'score_element' => array($element)
+                    );
+        }
+        return $standard;
+    }
+
     public function scoresAction()
     {
         if(isset($_GET['subject_id']))
@@ -70,7 +103,8 @@ class Teacher_Controller extends BK_Controller
             $subject = $this->model->get('subjects', $_GET['subject_id'])[0];
             $subject_name = $subject['name'];
 
-            $standard = $this->model->get_standard_table_by_subject($_GET['subject_id']);
+            $standard_raw = $this->model->get_standard_table_by_subject($_GET['subject_id']);
+            $standard = $this->convert_standard_to_structure($standard_raw);
 
             $data = array(
                 'title' => 'Quản lý môn học',

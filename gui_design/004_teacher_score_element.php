@@ -18,6 +18,7 @@
                       <th>Loại điểm</th>
                       <th>Tên biến công thức</th>
                       <th>Các outcome liên quan</th>
+                      <th>Điểm đạt outcome</th>
                     </tr>
                   </thead>
                   <tbody id="element_list">
@@ -38,6 +39,10 @@
                           <option value="1">Outcome thứ nhất</option>
                           <option value="2">Outcome thứ hai</option>
                         </select>
+                      </td>
+                      <td>
+                      <input name="out_score_1" type="text" style="height:5px" disabled /><br>
+                      <input name="out_score_2" type="text" style="height:5px" />
                       </td>
                     </tr>
                   </tbody>

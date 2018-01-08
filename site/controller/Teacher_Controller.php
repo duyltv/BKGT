@@ -162,6 +162,7 @@ class Teacher_Controller extends BK_Controller
 
             $subject = $this->model->get('subjects', $subject_id)[0];
             $subject_name = $subject['name'];
+            $insert_success = true;
 
             for ($i = 1; $i <= $score_count; $i++) 
             {
@@ -180,7 +181,7 @@ class Teacher_Controller extends BK_Controller
                     'semester_id' => $semester_id,
                     'user_id' => $student_id
                 );
-                $this->model->insert('study', $data);
+                $insert_success = $this->model->insert('study', $data);
                 
                 $elements = $this->model->get_element_list_by_subject($subject_id);
                 $ele_count = 1;
@@ -192,12 +193,19 @@ class Teacher_Controller extends BK_Controller
                         'score_element_id' => $element['id'],
                         'score' => $_POST['score'.$i.'_'.$ele_count]
                     );
-                    $this->model->insert('scores', $data);
+                    if (!$insert_success)
+                    {
+                        $this->model->update_manual('scores', $data, 'user_id = ' . $student_id . ' and semester_id = ' . $semester_id . ' and score_element_id = ' . $element['id']);
+                    } 
+                    else
+                        $this->model->insert('scores', $data);
                     $ele_count = $ele_count + 1;
                 }
             }
-
-            echo '<script type="text/javascript"> window.location = "index.php?c=teacher&a=scores&subject_id='.$subject_id.'" </script>';
+            if ($insert_success)
+                echo '<script type="text/javascript"> window.location = "index.php?c=teacher&a=scores&subject_id='.$subject_id.'" </script>';
+            else
+                echo '<script type="text/javascript"> window.location = "index.php?c=teacher&a=scores&subject_id='.$subject_id.'&update=1" </script>';
         }
     }
 

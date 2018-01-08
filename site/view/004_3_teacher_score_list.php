@@ -13,6 +13,12 @@
               <span class="badge badge-warning" style="cursor: pointer;" onclick='$("#subject_status").show();'>Hiện thống kê</span>
             </div>
         </div>
+        <?php
+        if(isset($_GET['update']))
+        {
+          echo '<font color="blue">Điểm của một số sinh viên có sẵn trong hệ thống đã được cập nhật thành công</font>';
+        }
+        ?>
         <div class="block-content collapse in">
             Môn học: <?php echo $data['subject_name']; ?>
             <br>

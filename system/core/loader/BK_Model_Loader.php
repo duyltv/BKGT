@@ -61,7 +61,7 @@ class BK_Model_Loader
 		
 		$query = "INSERT INTO $model ($mat_keys) VALUES ('$mat_values')";
 		
-		mysqli_query($this->conn,$query);
+		return mysqli_query($this->conn,$query);
     }
 	
 	/**
@@ -145,6 +145,31 @@ class BK_Model_Loader
 		$max_1 = $max-1;
 		$query = $query . "$keys[$max_1] = '$values[$max_1]' ";
 		$query = $query . "WHERE id = '$values[0]'";
+
+		mysqli_query($this->conn,$query);
+    }
+
+    /**
+     * Update
+     *
+     * @desc    Hàm cho phép edit nội dung table
+     */
+    public function update_manual($model, $data = array(), $condition="")
+    {
+        $this->load($model);
+		
+		// Update content to Database
+		$keys = array_keys($data);
+		$values = array_values($data);
+		$query = "UPDATE $model SET ";
+		
+		$max = sizeof($data);
+		for ($x = 0; $x < $max-1; $x++) {
+			$query = $query . "$keys[$x] = '$values[$x]', ";
+		} 
+		$max_1 = $max-1;
+		$query = $query . "$keys[$max_1] = '$values[$max_1]' ";
+		$query = $query . "WHERE " . $condition;
 
 		mysqli_query($this->conn,$query);
     }

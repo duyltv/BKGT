@@ -36,7 +36,7 @@
                   <tbody id="score_list">
                     <tr id="tr_score_1">
                       <td>1</td>
-                      <td><input type="text" placeholder="Học kỳ" name="semester1" value="" style="width: 100%;"></td>
+                      <td><input type="text" placeholder="Học kỳ" name="semester1" style="width: 100%;" value="<?php echo $data['semester_id']; ?>" disabled></td>
                       <td><input type="text" placeholder="MSSV" name="mssv1" value="" style="width: 100%;"></td>
                       <?php 
 
@@ -75,7 +75,6 @@ function addScore() {
 
   var score_semester = new_score.getElementsByTagName("input")[0];
   score_semester.name = "semester" + score_count;
-  score_semester.value = "";
 
   var score_mssv = new_score.getElementsByTagName("input")[1];
   score_mssv.name = "mssv" + score_count;
@@ -137,6 +136,7 @@ function process() {
                             if (i>0)
                             {
                               if (j>0) {
+                                if (j > 1)
                                 document.getElementsByTagName("input")[intput_order].value = cells[j];
                                 intput_order+=1;
                               }

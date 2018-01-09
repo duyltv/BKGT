@@ -146,11 +146,19 @@ class Teacher_Controller extends BK_Controller
                 $subject = $this->model->get('subjects', $_GET['subject_id'])[0];
                 $subject_name = $subject['name'];
 
+                $teach = $this->model->get_condition('teach', 'user_id = ' . $_SESSION['username'] . ' and subject_id = ' . $_GET['subject_id']);
+                $semester = '';
+                if (count($teach) > 0)
+                {
+                    $semester = $teach[0]['semester_id'];
+                }
+
                 $data = array(
                     'title' => 'Quản lý môn học',
                     'subject_id' => $_GET['subject_id'],
                     'subject_name' => $subject_name,
-                    'elements' => $this->model->get_element_list_by_subject($_GET['subject_id'])
+                    'elements' => $this->model->get_element_list_by_subject($_GET['subject_id']),
+                    'semester_id' => $semester
                 );
                 $this->view->load('004_4_teacher_type_score', $data);
                 $this->view->show();
